@@ -1,3 +1,8 @@
+---
+name: career-ops
+description: Use when evaluating job descriptions, scanning configured job portals, generating tailored ATS PDFs, processing pipeline/tracker workflows, or routing Career-Ops job-search tasks. Do not use for native batch orchestration; Phase 1 batch remains legacy Claude-only because batch/batch-runner.sh invokes claude -p.
+---
+
 # Career-Ops
 
 Use this skill to run Career-Ops inside Codex without creating a parallel
