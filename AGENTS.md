@@ -9,8 +9,8 @@ Career-Ops files already define the behavior.
 
 ## Default Runtime
 
-- Default local runtime: Codex signed in with ChatGPT.
-- No API key is required for the normal local Codex workflow in this fork.
+- Intended local runtime for this fork: Codex signed in with ChatGPT.
+- No API key is required by default for normal local use in this fork.
 - API-key-based integrations such as `gemini-eval.mjs` remain optional and
   separate from the default Codex path.
 - Keep `CLAUDE.md`, `.claude/`, `.gemini/`, and `.opencode/` as legacy and
@@ -114,10 +114,13 @@ does not touch the user's CV, tracker, reports, or other personal data.
 - Use `generate-pdf.mjs` for PDF rendering. Node Playwright in this repo is a
   script dependency, not a guarantee of Claude-style browser control.
 - Keep the existing legacy command surfaces intact for Claude, Gemini CLI, and
-  OpenCode. This fork makes Codex first-class without removing those references.
+  OpenCode. This fork gives Codex an intended local path without removing those
+  references.
 
 ## Start Here
 
 - User-facing setup: `docs/CODEX.md`
 - General repo setup: `docs/SETUP.md`
+- Repo-local skill/router aid for clients that support skills:
+  `.agents/skills/career-ops/SKILL.md`
 - Shared system behavior and legacy reference: `CLAUDE.md`

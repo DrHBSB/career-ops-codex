@@ -68,9 +68,10 @@ Use plain-language prompts in Codex, for example:
 - `Generate the tailored ATS PDF for this role.`
 - `Show me the tracker status and next actions.`
 
-## Codex-First Usage
+## Codex-Oriented Usage
 
-Codex is the default runtime in this fork. The normal local workflow is:
+Codex is the intended local runtime in this Codex-first fork. The normal local
+workflow is:
 
 1. Open Codex in this repo
 2. Stay signed in with ChatGPT
@@ -82,7 +83,7 @@ this fork.
 
 ## Available Actions
 
-| Action | Codex-first prompt |
+| Action | Codex-oriented prompt |
 | --- | --- |
 | Evaluate an offer | `Evaluate this job URL with Career-Ops.` |
 | Search for offers | `Scan my configured portals for matching roles.` |
@@ -110,4 +111,4 @@ go build -o career-dashboard .
 
 Batch processing is not yet ported to native Codex workers in Phase 1.
 `batch/batch-runner.sh` still invokes `claude -p`, so keep batch as a legacy
-Claude path for now.
+Claude path for now. Codex batch is a Phase 2 item.

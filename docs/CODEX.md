@@ -4,7 +4,11 @@ Career-Ops runs locally in Codex by following `AGENTS.md` and reusing the
 existing `modes/*.md`, `*.mjs`, templates, and tracker flow already checked
 into the repo.
 
-This fork treats Codex as the default local runtime.
+This fork is Codex-first by project direction, with Codex as the intended local
+runtime.
+
+Phase 1 is documentation and routing enablement plus repo-native scripts. It is
+not full Claude feature parity.
 
 ## Default Auth Story
 
@@ -65,7 +69,7 @@ introducing a new automation layer.
 
 ## Phase 1 Status
 
-Already comfortable in Codex:
+Codex-ready in Phase 1:
 
 - Single-offer evaluation and auto-pipeline work
 - Tracker, merge, verification, and normalization scripts
@@ -81,7 +85,7 @@ Not yet ported in Phase 1:
   hook integration
 
 Batch remains legacy-only for now because `batch/batch-runner.sh` still invokes
-`claude -p`.
+`claude -p`. Codex batch is a Phase 2 item.
 
 ## Behavioral Rules
 

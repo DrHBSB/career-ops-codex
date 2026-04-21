@@ -5,8 +5,10 @@ description: Use when evaluating job descriptions, scanning configured job porta
 
 # Career-Ops
 
-Use this skill to run Career-Ops inside Codex without creating a parallel
-workflow.
+Use this repo-local Codex skill/router aid, where supported, to help run
+Career-Ops inside Codex without creating a parallel workflow.
+
+`AGENTS.md` remains the primary project instruction file for this repo.
 
 ## First Principles
 
@@ -50,7 +52,7 @@ Batch is not yet ported to native Codex workers in Phase 1.
   design.
 - Do not claim that local Codex batch orchestration is implemented.
 - `batch/batch-runner.sh` still invokes `claude -p`, so the standalone batch
-  runner remains a legacy Claude path for now.
+  runner remains a legacy Claude path for now. Codex batch is a Phase 2 item.
 
 ## Codex Runtime Notes
 
