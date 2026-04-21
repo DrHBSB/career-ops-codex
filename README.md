@@ -16,7 +16,7 @@
   <img src="https://img.shields.io/badge/Claude_Code-000?style=flat&logo=anthropic&logoColor=white" alt="Claude Code">
   <img src="https://img.shields.io/badge/OpenCode-111827?style=flat&logo=terminal&logoColor=white" alt="OpenCode">
   <img src="https://img.shields.io/badge/Gemini_CLI-4285F4?style=flat&logo=google&logoColor=white" alt="Gemini CLI">
-  <img src="https://img.shields.io/badge/Codex_(soon)-6B7280?style=flat&logo=openai&logoColor=white" alt="Codex">
+  <img src="https://img.shields.io/badge/Codex-6B7280?style=flat&logo=openai&logoColor=white" alt="Codex">
   <img src="https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white" alt="Node.js">
   <img src="https://img.shields.io/badge/Go-00ADD8?style=flat&logo=go&logoColor=white" alt="Go">
   <img src="https://img.shields.io/badge/Playwright-2EAD33?style=flat&logo=playwright&logoColor=white" alt="Playwright">
@@ -51,12 +51,12 @@ Career-Ops turns any AI coding CLI into a full job search command center. Instea
 - **Evaluates offers** with a structured A-F scoring system (10 weighted dimensions)
 - **Generates tailored PDFs** -- ATS-optimized CVs customized per job description
 - **Scans portals** automatically (Greenhouse, Ashby, Lever, company pages)
-- **Processes in batch** -- evaluate 10+ offers in parallel with sub-agents
+- **Processes in batch** -- a legacy Claude batch flow remains available, but it is not Codex-native in Phase 1
 - **Tracks everything** in a single source of truth with integrity checks
 
 > **Important: This is NOT a spray-and-pray tool.** Career-ops is a filter -- it helps you find the few offers worth your time out of hundreds. The system strongly recommends against applying to anything scoring below 4.0/5. Your time is valuable, and so is the recruiter's. Always review before submitting.
 
-Career-ops is agentic: Claude Code navigates career pages with Playwright, evaluates fit by reasoning about your CV vs the job description (not keyword matching), and adapts your resume per listing.
+Career-ops is agentic: this Codex-first fork documents the intended local Codex path. In Phase 1, Codex can reuse the same checked-in modes, scripts, templates, and tracker flow for repo-native workflows such as evaluations, scans, PDFs, and tracker maintenance.
 
 > **Heads up: the first evaluations won't be great.** The system doesn't know you yet. Feed it context -- your CV, your career story, your proof points, your preferences, what you're good at, what you want to avoid. The more you nurture it, the better it gets. Think of it as onboarding a new recruiter: the first week they need to learn about you, then they become invaluable.
 
@@ -72,7 +72,7 @@ Built by someone who used it to evaluate 740+ job offers, generate 100+ tailored
 | **Negotiation Scripts** | Salary negotiation frameworks, geographic discount pushback, competing offer leverage |
 | **ATS PDF Generation** | Keyword-injected CVs with Space Grotesk + DM Sans design |
 | **Portal Scanner** | 45+ companies pre-configured (Anthropic, OpenAI, ElevenLabs, Retool, n8n...) + custom queries across Ashby, Greenhouse, Lever, Wellfound |
-| **Batch Processing** | Parallel evaluation with `claude -p` workers |
+| **Batch Processing** | Legacy parallel evaluation with `claude -p` workers (not yet Codex-ported in Phase 1) |
 | **Dashboard TUI** | Terminal UI to browse, filter, and sort your pipeline |
 | **Human-in-the-Loop** | AI evaluates and recommends, you decide and act. The system never submits an application -- you always have the final call |
 | **Pipeline Integrity** | Automated merge, dedup, status normalization, health checks |
@@ -81,8 +81,8 @@ Built by someone who used it to evaluate 740+ job offers, generate 100+ tailored
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/santifer/career-ops.git
-cd career-ops && npm install
+git clone <your-fork-url> career-ops-codex
+cd career-ops-codex && npm install
 npx playwright install chromium   # Required for PDF generation
 
 # 2. Check setup
@@ -95,20 +95,23 @@ cp templates/portals.example.yml portals.yml       # Customize companies
 # 4. Add your CV
 # Create cv.md in the project root with your CV in markdown
 
-# 5. Personalize with Claude
-claude   # Open Claude Code in this directory
-
-# Then ask Claude to adapt the system to you:
-# "Change the archetypes to backend engineering roles"
-# "Translate the modes to English"
-# "Add these 5 companies to portals.yml"
-# "Update my profile with this CV I'm pasting"
+# 5. Start Codex locally
+# Sign in with ChatGPT in your local Codex client.
+# No API key is required for the normal local workflow.
+# If your environment exposes the CLI directly:
+codex
 
 # 6. Start using
-# Paste a job URL or run /career-ops
+# Then ask Codex:
+# "Evaluate this job URL with Career-Ops and run the full pipeline."
+# "Scan my configured portals for matching roles."
+# "Generate the tailored ATS PDF for this role."
+# "Update my profile with this CV I'm pasting."
 ```
 
-> **The system is designed to be customized by Claude itself.** Modes, archetypes, scoring weights, negotiation scripts -- just ask Claude to change them. It reads the same files it uses, so it knows exactly what to edit.
+> **This fork is designed to be customized by Codex first.** Modes, archetypes, scoring weights, negotiation scripts, and tracker flow stay in the repo; ask Codex to adapt them by editing the same files the legacy runtimes already use.
+
+> **Phase 1 note:** single-offer evaluation, scans, PDFs, and tracker workflows are Codex-ready through the repo-native path. This does not mean full Claude feature parity yet. Batch processing is still legacy Claude-only because `batch/batch-runner.sh` invokes `claude -p`. Codex batch is Phase 2.
 
 See [docs/SETUP.md](docs/SETUP.md) for the full setup guide.
 
@@ -160,14 +163,24 @@ npm run gemini:eval -- "JD text here"
 
 ## Usage
 
+In Codex, use plain-language prompts from the repo root. `AGENTS.md` is the
+primary project instruction file. `.agents/skills/career-ops/SKILL.md` is
+included as a repo-local skill/router aid for clients that support skills. The
+slash commands below remain available in the legacy Claude, Gemini CLI, and
+OpenCode surfaces.
+
 Career-ops is a single slash command with multiple modes:
+
+Note: `/career-ops batch` below refers to the legacy Claude-only batch path in
+Phase 1. `batch/batch-runner.sh` still invokes `claude -p`, and Codex batch is
+Phase 2.
 
 ```
 /career-ops                → Show all available commands
 /career-ops {paste a JD}   → Full auto-pipeline (evaluate + PDF + tracker)
 /career-ops scan           → Scan portals for new offers
 /career-ops pdf            → Generate ATS-optimized CV
-/career-ops batch          → Batch evaluate multiple offers
+/career-ops batch          → Legacy Claude-only in Phase 1; Codex batch is Phase 2
 /career-ops tracker        → View application status
 /career-ops apply          → Fill application forms with AI
 /career-ops pipeline       → Process pending URLs
@@ -232,6 +245,8 @@ Features: 6 filter tabs, 4 sort modes, grouped/flat view, lazy-loaded previews, 
 
 ```
 career-ops/
+├── AGENTS.md                    # Primary Codex operating guide
+├── .agents/skills/career-ops/   # Repo-local skill/router aid for clients that support skills
 ├── CLAUDE.md                    # Agent instructions
 ├── cv.md                        # Your CV (create this)
 ├── article-digest.md            # Your proof points (optional)
@@ -263,12 +278,13 @@ career-ops/
 ## Tech Stack
 
 ![Claude Code](https://img.shields.io/badge/Claude_Code-000?style=flat&logo=anthropic&logoColor=white)
+![Codex](https://img.shields.io/badge/Codex-6B7280?style=flat&logo=openai&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=flat&logo=playwright&logoColor=white)
 ![Go](https://img.shields.io/badge/Go-00ADD8?style=flat&logo=go&logoColor=white)
 ![Bubble Tea](https://img.shields.io/badge/Bubble_Tea-FF75B5?style=flat&logo=go&logoColor=white)
 
-- **Agent**: Claude Code with custom skills and modes
+- **Agent**: Codex-oriented local workflow for Phase 1, with legacy Claude Code, Gemini CLI, and OpenCode surfaces kept for reference
 - **PDF**: Playwright/Puppeteer + HTML template
 - **Scanner**: Playwright + Greenhouse API + WebSearch
 - **Dashboard**: Go + Bubble Tea + Lipgloss (Catppuccin Mocha theme)
